@@ -9,3 +9,11 @@ union readdir_res switch (int errno) {
 	default:
 		void; /* con error: nada */
 };
+
+
+COMO EJECUTARLO:
+./calculadora_server
+
+./calculadora_client localhost 3 + 3 
+
+EN TERMINALES DISTINTAS
