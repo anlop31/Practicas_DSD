@@ -76,3 +76,20 @@ resta_1(double n1, double n2,  CLIENT *clnt)
 	}
 	return (&clnt_res);
 }
+
+vect *
+suma_vectores_1(vect n1, vect n2,  CLIENT *clnt)
+{
+	suma_vectores_1_argument arg;
+	static vect clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	arg.n1 = n1;
+	arg.n2 = n2;
+	if (clnt_call (clnt, suma_vectores, (xdrproc_t) xdr_suma_vectores_1_argument, (caddr_t) &arg,
+		(xdrproc_t) xdr_vect, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}

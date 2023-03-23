@@ -80,6 +80,75 @@ calculadora_1(char *host, double n1, double n2, int tipo)
 	return result_1->valor_resultado;
 }
 
+double
+calculadora_2(char *host, double* n1, double* n2, int tipo)
+{
+	CLIENT *clnt;
+	result  *result_1;
+	// double suma_1_n1;
+	// double suma_1_n2;
+	// result  *result_2;
+	// double multiplica_1_n1;
+	// double multiplica_1_n2;
+	// result  *result_3;
+	// double divide_1_n1;
+	// double divide_1_n2;
+	// result  *result_4;
+	// double resta_1_n1;
+	// double resta_1_n2;
+
+#ifndef	DEBUG
+	clnt = clnt_create (host, CALCULADORA, CALCULADORA_1, "udp");
+	if (clnt == NULL) {
+		clnt_pcreateerror (host);
+		exit (1);
+	}
+#endif	/* DEBUG */
+
+	if(tipo == suma_tipo){
+		result_1 = suma_1(n1, n2, clnt);
+		if (result_1 == (result *) NULL) {
+			clnt_perror (clnt, "call failed");
+		}
+	}
+	else if(tipo == multiplica_tipo){
+		result_1 = multiplica_1(n1, n2, clnt);
+		if (result_1 == (result *) NULL) {
+			clnt_perror (clnt, "call failed");
+		}
+	}
+	else if(tipo == divide_tipo){
+		result_1 = divide_1(n1, n2, clnt);
+		if (result_1 == (result *) NULL) {
+			clnt_perror (clnt, "call failed");
+		}
+	}
+	else if(tipo == resta_tipo){
+		result_1 = resta_1(n1, n2, clnt);
+		if (result_1 == (result *) NULL) {
+			clnt_perror (clnt, "call failed");
+		}
+	}
+
+#ifndef	DEBUG
+	clnt_destroy (clnt);
+#endif	 /* DEBUG */
+
+	int error = result_1->code;
+
+	if (error > 0){
+		printf("Operación no válida: código de error %d\n", error);
+
+		if (error == 1){
+			printf("División por cero\n");
+		}
+
+		exit (1);
+	}
+
+	return result_1->valor_resultado;
+}
+
 
 int
 main (int argc, char *argv[])
@@ -151,27 +220,5 @@ main (int argc, char *argv[])
 
 	} // bucle mientras salir es false
 
-	// if(operador == '+'){
-	// 	tipo = suma_tipo;
-	// }
-	// else if(operador == '-'){
-	// 	tipo = resta_tipo;
-	// }
-	// else if(operador == 'x' || operador == '*'){
-	// 	tipo = multiplica_tipo;
-	// }
-	// else if(operador == '/'){
-	// 	tipo = divide_tipo;
-	// }
-	// else{
-	// 	printf("Operador no valido\n");
-	// 	exit(1);
-	// }
-
-	// resultado = calculadora_1 (host, n1, n2, tipo);
-
-	// printf("El resultado de %f %c %f es %f\n\n",
-	// 		n1, operador, n2, resultado);
-
-exit (0);
+	exit (0);
 }

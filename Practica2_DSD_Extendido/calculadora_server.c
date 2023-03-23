@@ -11,9 +11,6 @@ suma_1_svc(double n1, double n2,  struct svc_req *rqstp)
 {
 	static result  result;
 
-	/*
-	 * insert server code here
-	 */
 	result.valor_resultado = n1+n2;
 	result.code = 0;
 
@@ -25,9 +22,6 @@ multiplica_1_svc(double n1, double n2,  struct svc_req *rqstp)
 {
 	static result  result;
 
-	/*
-	 * insert server code here
-	 */
 	result.valor_resultado = n1*n2;
 	result.code = 0;
 
@@ -39,9 +33,6 @@ divide_1_svc(double n1, double n2,  struct svc_req *rqstp)
 {
 	static result  result;
 
-	/*
-	 * insert server code here
-	 */
 	if(n2 == 0){
 		result.code = 1;
 		printf("División por cero\n\n");
@@ -50,7 +41,7 @@ divide_1_svc(double n1, double n2,  struct svc_req *rqstp)
 		result.valor_resultado = n1/n2;
 		result.code = 0;
 	}
-	
+
 	return &result;
 }
 
@@ -59,11 +50,24 @@ resta_1_svc(double n1, double n2,  struct svc_req *rqstp)
 {
 	static result  result;
 
-	/*
-	 * insert server code here
-	 */
 	result.valor_resultado = n1-n2;
 	result.code = 0;
+
+	return &result;
+}
+
+vect *
+suma_vectores_1_svc(vect n1, vect n2,  struct svc_req *rqstp)
+{
+	static vect  result;
+
+	result.vect_len = 5;
+	result.vect_val = (double *)malloc(result.vect_len * sizeof(double));
+
+
+	for(int i=0; i<5; i++){
+		result.vect_val[i] = n1.vect_val[i] + n2.vect_val[i];
+	}
 
 	return &result;
 }
