@@ -5,15 +5,11 @@ struct result {
     int code;
 };
 
-struct result2 {
-    double valor_resultado[5];
-    int code;
-};
 
 /* la siguiente union se utiliza para discriminar entre llamadas con exito y llamadas con errores */
 union readdir_res switch (int errno) {
 	case 0:
-		double result; /* sin error: listado del directorio */
+		double result; /* sin error */
 	default:
 		void; /* con error: nada */
 };
