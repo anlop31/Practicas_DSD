@@ -6,11 +6,36 @@
 #include "calculadora.h"
 
 bool_t
+xdr_vect (XDR *xdrs, vect *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_array (xdrs, (char **)&objp->vect_val, (u_int *) &objp->vect_len, 5,
+		sizeof (double), (xdrproc_t) xdr_double))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
 xdr_result (XDR *xdrs, result *objp)
 {
 	register int32_t *buf;
 
 	 if (!xdr_double (xdrs, &objp->valor_resultado))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->code))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_result2 (XDR *xdrs, result2 *objp)
+{
+	register int32_t *buf;
+
+	int i;
+	 if (!xdr_vector (xdrs, (char *)objp->valor_resultado, 5,
+		sizeof (double), (xdrproc_t) xdr_double))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->code))
 		 return FALSE;
@@ -71,6 +96,16 @@ xdr_resta_1_argument (XDR *xdrs, resta_1_argument *objp)
 	 if (!xdr_double (xdrs, &objp->n1))
 		 return FALSE;
 	 if (!xdr_double (xdrs, &objp->n2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_suma_vectores_1_argument (XDR *xdrs, suma_vectores_1_argument *objp)
+{
+	 if (!xdr_vect (xdrs, &objp->n1))
+		 return FALSE;
+	 if (!xdr_vect (xdrs, &objp->n2))
 		 return FALSE;
 	return TRUE;
 }

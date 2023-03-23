@@ -1,12 +1,5 @@
-typedef double vect<5>;
-
 struct result {
     double valor_resultado;
-    int code;
-};
-
-struct result2 {
-    double valor_resultado[5];
     int code;
 };
 
@@ -24,6 +17,5 @@ program CALCULADORA {
         result multiplica(double n1, double n2) = 2;
         result divide(double n1, double n2) = 3;
         result resta(double n1, double n2) = 4;
-        vect suma_vectores(vect n1, vect n2) = 5;
     } =1;
 } = 0x20000156;

@@ -40,12 +40,6 @@ _resta_1 (resta_1_argument *argp, struct svc_req *rqstp)
 	return (resta_1_svc(argp->n1, argp->n2, rqstp));
 }
 
-static vect *
-_suma_vectores_1 (suma_vectores_1_argument *argp, struct svc_req *rqstp)
-{
-	return (suma_vectores_1_svc(argp->n1, argp->n2, rqstp));
-}
-
 static void
 calculadora_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
@@ -54,7 +48,6 @@ calculadora_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		multiplica_1_argument multiplica_1_arg;
 		divide_1_argument divide_1_arg;
 		resta_1_argument resta_1_arg;
-		suma_vectores_1_argument suma_vectores_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -87,12 +80,6 @@ calculadora_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		_xdr_argument = (xdrproc_t) xdr_resta_1_argument;
 		_xdr_result = (xdrproc_t) xdr_result;
 		local = (char *(*)(char *, struct svc_req *)) _resta_1;
-		break;
-
-	case suma_vectores:
-		_xdr_argument = (xdrproc_t) xdr_suma_vectores_1_argument;
-		_xdr_result = (xdrproc_t) xdr_vect;
-		local = (char *(*)(char *, struct svc_req *)) _suma_vectores_1;
 		break;
 
 	default:
