@@ -3,7 +3,6 @@ import sys
 
 from calculadora import Calculadora
 
-from calculadora import vectorDouble
 
 from thrift.transport import TSocket
 from thrift.transport import TTransport
