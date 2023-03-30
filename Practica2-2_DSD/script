@@ -1,0 +1,4 @@
+#!/bin/bash
+
+thrift -gen py calculadora.thrift
+
