@@ -35,9 +35,26 @@ while(salir == False):
 
 	resultado = 0
 
+	v1 = []
+	v2 = []
+	v_resultado = []
+
 	# Introducir los operandos
 	if(opcion == 5):
 		print("vectores")
+		print("Introduzca el primer vector.")
+		for i in range(5):
+			valor = input("Introduce el valor {} del vector: ".format(i+1))
+			valor_float = float(valor)
+			v1.append(valor_float)
+
+		print("Introduzca el segundo vector.")
+		for i in range(5):
+			valor = input("Introduce el valor {} del vector: ".format(i+1))
+			valor_float = float(valor)
+			v2.append(valor_float)
+		
+
 	elif(opcion == 6):
 		print("Salir")
 	else:
@@ -56,16 +73,20 @@ while(salir == False):
 	if(opcion == 4):
 		resultado = client.division(n1, n2)
 	if(opcion == 5):
-		resultado = client.sumaVectores(n1, n2)
+		v_resultado = client.sumaVectores(v1, v2)
 	if(opcion == 6):
 		salir = True
 
 
 	if(salir == False):
-		# Imprimir operandos y resultado
-		print("Los dos operandos son: " + str(n1) + ", " + str(n2))
-		print("El resultado es: " + str(resultado))
-
+		if(opcion != 5):
+			# Imprimir operandos y resultado
+			print("Los dos operandos son: " + str(n1) + ", " + str(n2))
+			print("El resultado es: " + str(resultado))
+		if(opcion == 5):
+			print("Primer vector: " + v1)
+			print("Segundo vector: " + v2)
+			print("Vector resultado: " + v_resultado)
 
 #resultado = client.suma(1, 1)
 #print("1 + 1 = " + str(resultado))

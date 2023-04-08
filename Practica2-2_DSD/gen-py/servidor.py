@@ -43,9 +43,9 @@ class CalculadoraHandler:
 
     def sumaVectores(self, n1, n2):
         print("sumando vectores...")
-        for i in range(5):
-            v[i] = n1[i] + n2[i]
-            
+        v = []
+        for i in range(len(n1)):
+            v.append(n1[i] + n2[i])
         return v
 
 if __name__ == "__main__":
