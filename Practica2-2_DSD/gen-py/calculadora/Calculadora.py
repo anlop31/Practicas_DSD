@@ -965,8 +965,8 @@ class sumaVectores_args:
 
   thrift_spec = (
     None, # 0
-    (1, TType.STRUCT, 'n1', (vectorDouble, vectorDouble.thrift_spec), None, ), # 1
-    (2, TType.STRUCT, 'n2', (vectorDouble, vectorDouble.thrift_spec), None, ), # 2
+    (1, TType.LIST, 'n1', (TType.DOUBLE,None), None, ), # 1
+    (2, TType.LIST, 'n2', (TType.DOUBLE,None), None, ), # 2
   )
 
   def __init__(self, n1=None, n2=None,):
@@ -983,15 +983,23 @@ class sumaVectores_args:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.STRUCT:
-          self.n1 = vectorDouble()
-          self.n1.read(iprot)
+        if ftype == TType.LIST:
+          self.n1 = []
+          (_etype3, _size0) = iprot.readListBegin()
+          for _i4 in xrange(_size0):
+            _elem5 = iprot.readDouble();
+            self.n1.append(_elem5)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.STRUCT:
-          self.n2 = vectorDouble()
-          self.n2.read(iprot)
+        if ftype == TType.LIST:
+          self.n2 = []
+          (_etype9, _size6) = iprot.readListBegin()
+          for _i10 in xrange(_size6):
+            _elem11 = iprot.readDouble();
+            self.n2.append(_elem11)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -1005,12 +1013,18 @@ class sumaVectores_args:
       return
     oprot.writeStructBegin('sumaVectores_args')
     if self.n1 is not None:
-      oprot.writeFieldBegin('n1', TType.STRUCT, 1)
-      self.n1.write(oprot)
+      oprot.writeFieldBegin('n1', TType.LIST, 1)
+      oprot.writeListBegin(TType.DOUBLE, len(self.n1))
+      for iter12 in self.n1:
+        oprot.writeDouble(iter12)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.n2 is not None:
-      oprot.writeFieldBegin('n2', TType.STRUCT, 2)
-      self.n2.write(oprot)
+      oprot.writeFieldBegin('n2', TType.LIST, 2)
+      oprot.writeListBegin(TType.DOUBLE, len(self.n2))
+      for iter13 in self.n2:
+        oprot.writeDouble(iter13)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -1037,7 +1051,7 @@ class sumaVectores_result:
   """
 
   thrift_spec = (
-    (0, TType.STRUCT, 'success', (vectorDouble, vectorDouble.thrift_spec), None, ), # 0
+    (0, TType.LIST, 'success', (TType.DOUBLE,None), None, ), # 0
   )
 
   def __init__(self, success=None,):
@@ -1053,9 +1067,13 @@ class sumaVectores_result:
       if ftype == TType.STOP:
         break
       if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = vectorDouble()
-          self.success.read(iprot)
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype17, _size14) = iprot.readListBegin()
+          for _i18 in xrange(_size14):
+            _elem19 = iprot.readDouble();
+            self.success.append(_elem19)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -1069,8 +1087,11 @@ class sumaVectores_result:
       return
     oprot.writeStructBegin('sumaVectores_result')
     if self.success is not None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.DOUBLE, len(self.success))
+      for iter20 in self.success:
+        oprot.writeDouble(iter20)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

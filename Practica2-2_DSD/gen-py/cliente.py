@@ -83,10 +83,12 @@ while(salir == False):
 			# Imprimir operandos y resultado
 			print("Los dos operandos son: " + str(n1) + ", " + str(n2))
 			print("El resultado es: " + str(resultado))
+			print("")
 		if(opcion == 5):
-			print("Primer vector: " + v1)
-			print("Segundo vector: " + v2)
-			print("Vector resultado: " + v_resultado)
+			print("Primer vector: " + str(v1))
+			print("Segundo vector: " + str(v2))
+			print("Vector resultado: " + str(v_resultado))
+			print("")
 
 #resultado = client.suma(1, 1)
 #print("1 + 1 = " + str(resultado))

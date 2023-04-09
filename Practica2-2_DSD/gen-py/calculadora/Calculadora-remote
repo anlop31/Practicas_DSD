@@ -28,7 +28,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print '  i32 resta(i32 num1, i32 num2)'
   print '  i32 multiplicacion(i32 num1, i32 num2)'
   print '  i32 division(i32 num1, i32 num2)'
-  print '  vectorDouble sumaVectores(vectorDouble n1, vectorDouble n2)'
+  print '   sumaVectores( n1,  n2)'
   print ''
   sys.exit(0)
 
