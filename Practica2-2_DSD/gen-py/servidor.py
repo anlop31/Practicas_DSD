@@ -9,6 +9,9 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 
+from thrift.Thrift import TApplicationException
+
+
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -65,11 +68,14 @@ class CalculadoraHandler:
     def divideVectores(self, n1, n2):
         print("sumando vectores...")
         v = []
-        for i in range(len(n1)):
-            if(n2[i] == 0): # no se puede dividir entre 0
-                raise ValueError("El valor de x debe ser positivo")
-            else:
-                v.append(n1[i] / n2[i])        
+        try:
+            for i in range(len(n1)):
+                if(n2[i] == 0):
+                    raise ValueError("NO SE PUEDE DIVIDIR ENTRE 0")
+                else:
+                    v.append(n1[i] / n2[i])
+        except ValueError as e:
+            raise TApplicationException(TApplicationException.INTERNAL_ERROR, str(e))
         return v
     
 

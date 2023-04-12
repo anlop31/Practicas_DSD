@@ -16,8 +16,6 @@ transport.open()
 print("hacemos ping al server")
 client.ping()
 
-# my_vector = vectorDouble()
-# my_vector.data = [1.0, 2.0, 3.0]
 
 salir = False
 
@@ -36,12 +34,12 @@ while(salir == False):
 	# Si no se ha elegido salir, se entra en el bucle
 	if(seleccion != 3):
 		menu = False
-	else:
+	else: # Si se elige salir, se sale del programa entero
 		menu = True
 		salir = True
 
 	while(menu == False):
-		if(seleccion == 1):
+		if(seleccion == 1): 
 			# Menu para elegir operacion
 			print("\nOperaciones con reales:")
 			print("1. Suma.")
@@ -100,27 +98,30 @@ while(salir == False):
 			if(opcion == 3):
 				v_resultado = client.multiplicaVectores(v1, v2)
 			if(opcion == 4):
-				v_resultado = client.divideVectores(v1, v2)
+				try:
+					v_resultado = client.divideVectores(v1, v2)
+				except ValueError as error:
+					print("Se produjo un error: ", error)
+					resultado = None
 			if(opcion == 5):
 				menu = True
 
-		else: # seleccion = 3
-			salir == True
-			menu == True
+		# else: # seleccion = 3
+		# 	salir == True
+		# 	menu == True
 		
 		if(menu == False and salir == False):
 			if(seleccion == 1): # si la seleccion eran numeros reales
 				# Imprimir operandos y resultado
 				print("\nLos dos operandos son: " + str(n1) + ", " + str(n2))
 				print("El resultado es: " + str(resultado))
-				# print("")
 			elif(seleccion == 2): # si la seleccion eran vectores
 				print("\nPrimer vector: " + str(v1))
 				print("Segundo vector: " + str(v2))
-				print("Vector resultado: " + str(v_resultado))
-				# print("")
-		elif (menu == True and salir == True):
-			print("Saliendo del programa")
+				if (resultado == None):
+					print("No se pudo calcular, no se puede dividir entre cero")
+				else:
+					print("Vector resultado: " + str(v_resultado))
 
 
 
