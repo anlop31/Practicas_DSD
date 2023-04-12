@@ -47,6 +47,31 @@ class CalculadoraHandler:
         for i in range(len(n1)):
             v.append(n1[i] + n2[i])
         return v
+    
+    def restaVectores(self, n1, n2):
+        print("restando vectores...")
+        v = []
+        for i in range(len(n1)):
+            v.append(n1[i] - n2[i])
+        return v
+    
+    def multiplicaVectores(self, n1, n2):
+        print("multiplicando vectores...")
+        v = []
+        for i in range(len(n1)):
+            v.append(n1[i] * n2[i])
+        return v
+    
+    def divideVectores(self, n1, n2):
+        print("sumando vectores...")
+        v = []
+        for i in range(len(n1)):
+            if(n2[i] == 0): # no se puede dividir entre 0
+                raise ValueError("El valor de x debe ser positivo")
+            else:
+                v.append(n1[i] / n2[i])        
+        return v
+    
 
 if __name__ == "__main__":
     handler = CalculadoraHandler()
