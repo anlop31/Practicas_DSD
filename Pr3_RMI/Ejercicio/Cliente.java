@@ -12,27 +12,28 @@ public class Cliente {
         }
         try {
             // Crea el stub para el cliente especificando el nombre del servidor
-            Registry mireg = LocateRegistry.getRegistry("127.0.0.1", 1098);
+            Registry mireg = LocateRegistry.getRegistry("127.0.0.1", 1097);
+            Registry mireg2 = LocateRegistry.getRegistry("127.0.0.1", 1098);
+
             System.out.println("Mireg creado");
             System.out.println("Buscando mi contador...");
-            icontador micontador = (icontador) mireg.lookup("mmicontador");
-            System.out.println("mmicontador encontrado");
-            // Pone el contador al valor inicial 0
-            System.out.println("Poniendo contador a 0");
-            micontador.sumar(0);
-            // Obtiene hora de comienzo
-            long horacomienzo = System.currentTimeMillis();
-            // Incrementa 1000 veces
-            System.out.println("Incrementando...");
-            for (int i = 0; i < 1000; i++) {
-                micontador.incrementar();
-            }
-            // Obtiene hora final, realiza e imprime calculos
-            long horafin = System.currentTimeMillis();
-            System.out.println("Media de las RMI realizadas = "
-                    + ((horafin - horacomienzo) / 1000f)
-                    + " msegs");
-            System.out.println("RMI realizadas = " + micontador.sumar());
+
+            Donacion_I midonacion1 = (Donacion_I) mireg.lookup("servidor1");
+            Donacion_I midonacion2 = (Donacion_I) mireg2.lookup("servidor2");
+            System.out.println("servidores encontrados");
+
+
+            // registramos
+            midonacion1.registro_cliente("Paco");
+            midonacion2.registro_cliente("Paco");
+            midonacion1.registro_cliente("Juan");
+            midonacion2.registro_cliente("Pepe");
+
+            // donar
+            midonacion1.donar("Pepe", 200);
+            midonacion2.donar("Paco", 100);
+            midonacion1.donar("Juan", 70);
+
         } catch (NotBoundException | RemoteException e) {
             System.err.println("Exception del sistema: " + e);
         }

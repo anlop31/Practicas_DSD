@@ -23,3 +23,5 @@ public class Entidad {
         total_donado += cantidad;
     }
 }
+
+

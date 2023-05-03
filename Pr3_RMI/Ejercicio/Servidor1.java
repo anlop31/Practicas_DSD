@@ -14,10 +14,11 @@ public class Servidor1 {
         try {
             // Crea una instancia de contador
             // System.setProperty("java.rmi.server.hostname","192.168.1.107");
-            Registry reg = LocateRegistry.createRegistry(1098); // 1099
-            Donacion miDonacion = new Donacion();
-            Naming.rebind("Donacion1", miDonacion);
-            // suma = 0;
+            String nombre1 = "servidor2";
+            Registry reg = LocateRegistry.createRegistry(1097);
+            Donacion miDonacion = new Donacion(nombre1);
+            Naming.rebind("servidor1", miDonacion);
+
             System.out.println("Servidor RemoteException | MalformedURLExceptiondor preparado");
         } catch (RemoteException | MalformedURLException e) {
             System.out.println("Exception: " + e.getMessage());

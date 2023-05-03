@@ -4,9 +4,9 @@ import java.rmi.NotBoundException;
 
 
 public interface Donacion_I extends Remote {
-    Donacion_I getReplica() throws RemoteException;
+    public Donacion_I getReplica() throws RemoteException, NotBoundException;
 
-    public void registro_cliente(String nombre) throws RemoteException;
+    public void registro_cliente(String nombre) throws RemoteException, NotBoundException;
 
     public boolean estaRegistrado(String nombre) throws RemoteException;
 
@@ -20,3 +20,4 @@ public interface Donacion_I extends Remote {
     public int consultarTotalDonadoUsuario(String nombre) throws RemoteException;
 
 }
+

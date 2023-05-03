@@ -8,14 +8,12 @@ import java.rmi.NotBoundException;
 
 import java.util.ArrayList;
 
-public class Donacion extends UnicastRemoteObject implements icontador {
+public class Donacion extends UnicastRemoteObject implements Donacion_I {
     private int subtotal_donado;
     int total_donado;
     ArrayList<Entidad> entidades;
     String nombreReplica;
-    ///////
-    int L;
-    boolean tiene_prioridad; boolean sc;
+
 
     public Donacion(String nombreServer) throws RemoteException {
         entidades = new ArrayList<Entidad>();
@@ -69,7 +67,7 @@ public class Donacion extends UnicastRemoteObject implements icontador {
 
     public void donar(String nombre, int cantidad) throws RemoteException, NotBoundException {
         // if(estaRegistrado(nombre))
-        //     subtotal_donado += cnatidad;
+        //     subtotal_donado += cantidad;
 
         Donacion_I replica = this.getReplica();
 
@@ -79,7 +77,7 @@ public class Donacion extends UnicastRemoteObject implements icontador {
             subtotal_donado += cantidad;
 
             System.out.println("Donando "+cantidad+" a la cantidad actual de: "+total_donado);
-            total_donado = replica.getTotalDonado() + cantidad;
+            total_donado = total_donado + cantidad;
 
             replica.recibirActualizacion(total_donado);
         }
