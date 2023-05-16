@@ -21,7 +21,12 @@ public class Donacion extends UnicastRemoteObject implements Donacion_I {
     }
 
     public Donacion_I getReplica() throws RemoteException, NotBoundException {
-        Registry reg = LocateRegistry.getRegistry("127.0.0.1", 1098);
+        Registry reg;
+        if(nombreReplica == "servidor1")
+            reg = LocateRegistry.getRegistry("127.0.0.1", 1097);
+        else 
+            reg = LocateRegistry.getRegistry("127.0.0.1", 1098);
+
 
         return (Donacion_I) reg.lookup(nombreReplica);
     }
@@ -76,7 +81,7 @@ public class Donacion extends UnicastRemoteObject implements Donacion_I {
             entidad = this.getEntidad(nombre);
             subtotal_donado += cantidad;
 
-            System.out.println("Donando "+cantidad+" a la cantidad actual de: "+total_donado);
+            System.out.println("Donado "+cantidad+" a la cantidad actual de: "+total_donado);
             total_donado = total_donado + cantidad;
 
             replica.recibirActualizacion(total_donado);
@@ -102,7 +107,7 @@ public class Donacion extends UnicastRemoteObject implements Donacion_I {
         return entidad;
     }
 
-    public int getSubtotalDonado(String nombre) throws RemoteException{
+    public int consultarSubtotalDonado(String nombre) throws RemoteException{
         if(this.getEntidad(nombre).getTotalDonado() > 0){
             return subtotal_donado;
         }

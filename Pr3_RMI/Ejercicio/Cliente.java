@@ -12,14 +12,14 @@ public class Cliente {
         }
         try {
             // Crea el stub para el cliente especificando el nombre del servidor
-            Registry mireg = LocateRegistry.getRegistry("127.0.0.1", 1097);
-            Registry mireg2 = LocateRegistry.getRegistry("127.0.0.1", 1098);
+            // Registry mireg = LocateRegistry.getRegistry("127.0.0.1", 1097);
+            Registry mireg = LocateRegistry.getRegistry("127.0.0.1", 1098);
 
-            System.out.println("Mireg creado");
-            System.out.println("Buscando mi contador...");
+            System.out.println("Registros creados");
+            System.out.println("Buscando servidores de donacion...");
 
             Donacion_I midonacion1 = (Donacion_I) mireg.lookup("servidor1");
-            Donacion_I midonacion2 = (Donacion_I) mireg2.lookup("servidor2");
+            Donacion_I midonacion2 = (Donacion_I) mireg.lookup("servidor2");
             System.out.println("servidores encontrados");
 
 
