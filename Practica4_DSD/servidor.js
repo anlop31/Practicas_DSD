@@ -5,6 +5,14 @@ var fs = require("fs");
 var path = require("path");
 var socketio = require("socket.io");
 
+function getTimeStamp() {
+    // Implementa la lógica para obtener el timestamp actual
+    // Puedes usar Date.now() u otras funciones de JavaScript para obtener el timestamp
+    // Por ejemplo:
+    return new Date().toISOString();
+}
+
+
 // módulos mongodb y mimeTypes
 var MongoClient = require('mongodb').MongoClient;
 var MongoServer = require('mongodb').Server;
@@ -15,7 +23,7 @@ var httpServer = http.createServer(
 	function(request, response) {
 		///
         var uri = url.parse(request.url).pathname;
-		if (uri=="/") uri = "/domotica.html";
+		if (uri=="/") uri = "/servidor.html";
         ///
 		var fname = path.join(process.cwd(), uri);
 		fs.exists(fname, function(exists) {
@@ -39,19 +47,21 @@ var httpServer = http.createServer(
 	}
 );
 
-httpServer.listen(8080);
-console.log("Servicio HTTP iniciado");
+// // httpServer.listen(8080);
+// console.log("Servicio HTTP iniciado");
 
 // MongoDB
 MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, function(err, db) {
     if(err)
         throw err;
 
-    httpServer.listen(8080);
+    httpServer.listen(8081);
 	var io = socketio(httpServer);
 
     // la base de datos se llamará domotica
 	var dbo = db.db("domotica");
+
+
 
     // Creamos las colecciones de persianas y aire acondicionado
 	dbo.createCollection("persianas", function(err, collection){
@@ -75,7 +85,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
                 function(err, result) {
                     if (!err) {
                     console.log("Hemos insertado en A/C: {valor:" + datos[0] + ", minimo:" + datos[1] + ", maximo:" + datos[2] + "}");
-                    io.sockets.emit('Registro', getTimeStamp() + " - Modificación de A/C ");
+                    io.sockets.emit('Registro', getTimeStamp() + " - Modificación de A/C: " + datos[0] + grados);
                     }
                     else
                         console.log("Error al insertar datos en la colección.");
@@ -83,7 +93,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
         });
 
           /** Estado **/
-        socket.on('slider_1', function (datos) {
+        socket.on('activar_ac', function (datos) {
             dbo.collection("aire_acondicionado").insert({estado:datos}, {safe:true},
                 function(err, result) {
                     if (!err) {
@@ -111,12 +121,12 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
         });
 
         /** Estado **/
-        socket.on('slider_2', function (datos) {
+        socket.on('activar_pers', function (datos) {
             dbo.collection("persianas").insert({estado:datos}, {safe:true},
                 function(err, result) {
                     if (!err) {
                         console.log("Insertado en Persianas: {estado:"+datos+"}");
-                        io.sockets.emit('Registro', getTimeStamp() + " - Persianas " + datos);
+                        io.sockets.emit('Registro', getTimeStamp() + " - Persiana " + datos);
                     }
                     else
                         console.log("Error al insertar datos en la colección.");
@@ -125,7 +135,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
 
         /*** Avisos ***/
         socket.on ('aviso', function (sensor) {
-            var alarma = "Aviso: " + sensor + " fuera de umbral"; // cambiar
+            var alarma = "Aviso: " + sensor + " fuera de los umbrales"; // cambiar
             console.log (alarma);
             io.sockets.emit ('aviso', alarma);
         });
