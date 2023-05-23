@@ -6,9 +6,6 @@ var path = require("path");
 var socketio = require("socket.io");
 
 function getTimeStamp() {
-    // Implementa la lógica para obtener el timestamp actual
-    // Puedes usar Date.now() u otras funciones de JavaScript para obtener el timestamp
-    // Por ejemplo:
     return new Date().toISOString();
 }
 
@@ -47,8 +44,6 @@ var httpServer = http.createServer(
 	}
 );
 
-// // httpServer.listen(8080);
-// console.log("Servicio HTTP iniciado");
 
 // MongoDB
 MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, function(err, db) {
@@ -62,43 +57,42 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
 	var dbo = db.db("domotica");
 
 
-
     // Creamos las colecciones de persianas y aire acondicionado
 	dbo.createCollection("persianas", function(err, collection){
         if(!err)
-                console.log("Coleccion creada en Mongo con nombre: " + collection.collectionName);
+            console.log("Coleccion creada en mongo: " + collection.collectionName);
     });
 
     dbo.createCollection("aire_acondicionado", function(err, collection){
         if(!err)
-                console.log("Coleccion creada en Mongo con nombre: " + collection.collectionName);
+            console.log("Coleccion creada en mongo: " + collection.collectionName);
     });
 
 
     io.sockets.on('connection',function(socket) {
         console.log("Conectado");
     
-        /*** Inserción de colección Aire_Acondicionado ***/
-          /** Valores **/
+        // Inserción de colección Aire acondicionado //
+        // Insertamos los valores
         socket.on('enviar-datos-aire', function (datos) {
             dbo.collection("aire_acondicionado").insert({valor:datos[0], minimo:datos[1], maximo:datos[2]}, {safe:true},
                 function(err, result) {
-                    if (!err) {
+                    if (!err){
                     console.log("Hemos insertado en A/C: {valor:" + datos[0] + ", minimo:" + datos[1] + ", maximo:" + datos[2] + "}");
-                    io.sockets.emit('Registro', getTimeStamp() + " - Modificación de A/C: " + datos[0] + grados);
+                    io.sockets.emit('Registro', getTimeStamp() + " - Modificación de A/C: " + datos[0] + " grados");
                     }
                     else
                         console.log("Error al insertar datos en la colección.");
                 });
         });
 
-          /** Estado **/
+        // Introducimos el  estado (activar el aire acondicionado)
         socket.on('activar_ac', function (datos) {
             dbo.collection("aire_acondicionado").insert({estado:datos}, {safe:true},
                 function(err, result) {
-                    if (!err) {
+                    if (!err){
                         console.log("Insertado en A/C: {estado:" + datos + "}");
-                        io.sockets.emit('Registro', getTimeStamp() + " - Aire acondicionado " + datos);
+                        io.sockets.emit('Registro', getTimeStamp() + " - Aire acondicionado " + datos); // aire acondicionado apagado/encendido
                     }
                     else
                         console.log("Error al insertar datos en la colección.");
@@ -106,26 +100,26 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
         });
     
 
-        /*** Inserción de colección Persianas ***/
-        /** Valores **/
+        // Inserción de colección Persianas //
+        // Insertamos los valores
         socket.on('enviar-datos-persianas', function (datos) {
             dbo.collection("persianas").insert({valor:datos[0], minimo:datos[1], maximo:datos[2]}, {safe:true},
                 function(err, result) {
-                    if (!err) {
+                    if (!err){
                         console.log("Insertado en Persianas: {valor:" + datos[0] + ", minimo:" + datos[1] + ", maximo:" + datos[2] + "}");
-                        io.sockets.emit('Registro', getTimeStamp() + " - Modificación persianas");
+                        io.sockets.emit('Registro', getTimeStamp() + " - Luminosidad modificada");
                     }
                     else
                         console.log("Error al insertar datos en la colección.");
                 });
         });
 
-        /** Estado **/
+        // Introducimos el estado (activar persiana - abrir persiana)
         socket.on('activar_pers', function (datos) {
             dbo.collection("persianas").insert({estado:datos}, {safe:true},
                 function(err, result) {
-                    if (!err) {
-                        console.log("Insertado en Persianas: {estado:"+datos+"}");
+                    if (!err){
+                        console.log("Insertado en Persianas: {estado:" + datos + "}");
                         io.sockets.emit('Registro', getTimeStamp() + " - Persiana " + datos);
                     }
                     else

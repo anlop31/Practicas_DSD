@@ -86,6 +86,7 @@
     var socket = io.connect(serviceURL);
 
 
+    // Funcion para enviar los datos al agente y 
     function enviar(id) {
       // id = aire ó persianas
       var formulario = document.getElementById(id); 
@@ -116,14 +117,23 @@
       var estado;
 
       if (que_activar==="activar_ac") {
-        ((activador.checked) ? estado="Encendido" : estado="Apagado");
+        if(activador.checked == true){
+          estado = "Encendido";
+        }
+        else{
+          estado = "Apagado";
+        }
         socket.emit(que_activar, estado);
       }
       else {
-        ((activador.checked) ? estado="Abierta" : estado="Cerrada");
+        if(activador.checked == true){
+          estado = "Abierta";
+        }
+        else{
+          estado = "Cerrada";
+        }
         socket.emit(que_activar, estado);
       }
-      // alert("Slider: " + estado);
     }
 
 
@@ -156,16 +166,15 @@
       var temp = document.getElementById("aire");
       var luz = document.getElementById("persianas");
 
-      //
-      if ( (+temp[0].value > +temp[2].value) && (+luz[0].value > +luz[2].value) ){
+      if ( (+temp[0].value > +temp[2].value) && (+luz[0].value > +luz[2].value) ){ 
         socket.emit ("accion");
         document.getElementById("activar_pers").checked = true;
         encender ("activar_pers");
       }
-      else if ( (+datos[0] < +datos[1]) || (+datos[0] > +datos[2]) )
+      else if ( (+datos[0] < +datos[1]) || (+datos[0] > +datos[2]) ) 
         socket.emit ("aviso", sensor);
-      else {
-        document.getElementById("activar_pers").checked = false;
+      else { 
+        document.getElementById("activar_pers").checked = false; 
         encender ("activar_pers");
       }
 
