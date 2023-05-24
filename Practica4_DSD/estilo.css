@@ -10,8 +10,8 @@ body {
   
   h2 {
     text-align: center;
-    font-variant: small-caps;
-    color: royalblue;
+    /* font-variant: small-caps; */
+    color: blue;
   }
   
   .main {
@@ -22,18 +22,17 @@ body {
   
   .elemento {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr; /* 2 columnas de igual tamaño */
   }
   
   .actuador {
     border-style: groove;
     background-color: gainsboro;
-    border-radius: 8%;
   }
   
   .formulario {
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr; /* 5 filas de igual tamaño */
   }
   
   .centrado {
@@ -59,29 +58,33 @@ body {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+    /* -webkit-transition: .4s; */
+    transition: .4s; /* transición del cambio de color */
   }
   
-  .slider:before {
+  .slider:before { /*bolita*/
     position: absolute;
     content: "";
-    height: 26px;
+    height: 26px; /* radio bola slider */
     width: 26px;
     left: 4px;
-    bottom: 4px;
+    bottom: 4px; /* colocación dentro del slider */
     background-color: white;
-    -webkit-transition: .4s;
+    /* -webkit-transition: .4s; */
     transition: .4s;
   }
   
+  /* cuando el input esté marcado, se seleccionará el elemento .slider
+  que sigue inmediatamente después del input */
   input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #2196F3; /*checked: true */
   }
   
-  input:focus + .slider {
+  /* cuando el input tenga el foco, se seleccionará el elemento .slider
+  que sigue inmediatamente después del input. */
+  /* input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
-  }
+  } */
   
   input:checked + .slider:before {
     -webkit-transform: translateX(26px);
@@ -94,11 +97,12 @@ body {
     border-radius: 34px;
   }
   
+  /* Bolita redonda */
   .slider.round:before {
     border-radius: 50%;
   }
   
-  .log-parent {
+  .log-class {
     margin-top: 40px;
     border-top-style: solid;
     width: 100%;
@@ -108,11 +112,9 @@ body {
   #log {
     overflow-y: scroll;
     height: 250px;
-    background-color: darkgrey;
+    background-color: rgb(202, 202, 202); /*darkgrey*/
     line-height: 25px;
     font-size: 18px;
-    border-bottom-left-radius: 10%;
-    border-bottom-right-radius: 10%;
     border-top-right-radius: 2%;
     border-top-left-radius: 2%;
   }

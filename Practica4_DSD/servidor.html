@@ -4,10 +4,9 @@
 <html>
 
   <head>
-      <meta charset="utf-8" />
       <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+      <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
       <title> Domótica </title>
       <link rel="stylesheet" types="text/css" href="estilo.css"> <!---->
   </head>
@@ -18,7 +17,7 @@
       <!-- Aire acondicionado -->
       <div class="actuador">
         <form class="formulario" id="aire">
-          <h2> Aire Acondicionado </h2>
+          <h2> Aire acondicionado </h2>
           <div class="elemento centrado">
             <label for="valor">Grados: </label>
             <input name="valor" type="number" value="24" min="10" max="40"/>
@@ -31,8 +30,8 @@
             <label for="max">Máximo: </label>
             <input name="max" type="number" value="30" min="10" max="40"/>
           </div>
-          <div class="main" style="grid-gap: 0%;">
-            <input class="centrado" type="submit" name="submit" value="Actualizar valores"
+          <div class="main">
+            <input class="centrado" type="submit" name="submit" value="Actualizar temperatura"
               onclick="enviar('aire');return false;"/>
             <label class="switch centrado">
               <input type="checkbox" id="activar_ac" onclick="encender('activar_ac');">
@@ -47,7 +46,7 @@
         <form class="formulario" id="persianas">
           <h2> Persianas </h2>
           <div class="elemento centrado">
-            <label for="valor">Valor: </label>
+            <label for="valor">Luminosidad: </label>
             <input name="valor" type="number" value="5" min="0" max="10"/>
           </div>
           <div class="elemento centrado">
@@ -58,9 +57,9 @@
             <label for="max">Máximo: </label>
             <input name="max" type="number" value="7" min="0" max="10"/>
           </div>
-          <div class="main" style="grid-gap: 0%;">
+          <div class="main">
             <input class="centrado" type="submit" name="submit"
-                value="Actualizar valores" onclick="enviar('persianas');return false;"/>
+                value="Actualizar luminosidad" onclick="enviar('persianas');return false;"/>
             <label class="switch centrado">
               <input type="checkbox" id="activar_pers" onclick="encender('activar_pers');">
               <span class="slider round"></span>
@@ -72,8 +71,8 @@
     </div>
 
 
-    <div class="centrado log-parent actuador">
-      <h1>HISTORIAL DE EVENTOS DEL SERVIDOR</h1>
+    <div class="centrado log-class actuador">
+      <h1>Histórico de eventos del servidor</h1>
       <div id="log"></div>
     </div>
 
@@ -86,7 +85,7 @@
     var socket = io.connect(serviceURL);
 
 
-    // Funcion para enviar los datos al agente y 
+    // Funcion para enviar los datos al agente y al socket
     function enviar(id) {
       // id = aire ó persianas
       var formulario = document.getElementById(id); 
@@ -94,9 +93,9 @@
 
       // Valor (grados o luminosidad)
       datos.push(formulario[0].value);
-      // Mínimo
+      // Mínimo de los valores
       datos.push(formulario[1].value);
-      // Máximo
+      // Máximo de los valores
       datos.push(formulario[2].value);
 
       // Envío de información al Agente
@@ -114,25 +113,25 @@
 
     function encender(que_activar){
       var activador = document.getElementById(que_activar);
-      var estado;
+      this.estado;
 
-      if (que_activar==="activar_ac") {
+      if (que_activar=="activar_ac") {
         if(activador.checked == true){
-          estado = "Encendido";
+          this.estado = "Encendido";
         }
         else{
-          estado = "Apagado";
+          this.estado = "Apagado";
         }
         socket.emit(que_activar, estado);
       }
-      else {
+      else { // activar_pers
         if(activador.checked == true){
-          estado = "Abierta";
+          this.estado = "Abierta";
         }
         else{
-          estado = "Cerrada";
+          this.estado = "Cerrada";
         }
-        socket.emit(que_activar, estado);
+        socket.emit(que_activar, this.estado);
       }
     }
 
@@ -152,10 +151,11 @@
     }
 
     // Recepción de eventos del servidor
-    socket.on ('Registro', function (mensaje) { // log
+      // registrar cambios
+    socket.on ('Registro', function (mensaje) { 
       actualizarLog (mensaje);
     });
-
+      // registrar aviso (sobrepaso de umbrales)
     socket.on ('aviso', function (mensaje) {
       actualizarLog (mensaje, true);
     });
@@ -166,17 +166,40 @@
       var temp = document.getElementById("aire");
       var luz = document.getElementById("persianas");
 
-      if ( (+temp[0].value > +temp[2].value) && (+luz[0].value > +luz[2].value) ){ 
-        socket.emit ("accion");
-        document.getElementById("activar_pers").checked = true;
-        encender ("activar_pers");
+      // temp[0] es el valor de la temperatura
+      // temp[1] el mínimo de temperatura
+      // temp[2] el máximo de temperatura
+
+      // luz[0] es el valor de la luminosidad
+      // luz[1] el mínimo de luminosidad
+      // luz[2] el máximo de luminosidad
+
+      // ambos sobrepasan los máximos
+      if ( (+temp[0].value > +temp[2].value) && (+luz[0].value > +luz[2].value) ){ // max
+        socket.emit ("accion"); // ambos sensores
+        if(this.estado == "Abierta"){
+          document.getElementById("activar_pers").checked = false;
+          encender ("activar_pers"); // cerrar persiana
+        }
       }
-      else if ( (+datos[0] < +datos[1]) || (+datos[0] > +datos[2]) ) 
-        socket.emit ("aviso", sensor);
-      else { 
-        document.getElementById("activar_pers").checked = false; 
-        encender ("activar_pers");
+      // ambos sobrepasan los mínimos
+      else if ( (+temp[0].value < +temp[1].value) && (+luz[0].value < +luz[1].value) ){ //min
+        socket.emit ("accion"); // ambos sensores
+        if(this.estado == "Abierta"){
+          document.getElementById("activar_pers").checked = false;
+          encender ("activar_pers"); // cerrar persiana
+        }
       }
+      // el cambio actual ha sobrepasado el mínimo o máximo
+      else if ( (+datos[0] < +datos[1]) || (+datos[0] > +datos[2]) ) { // cambio actual
+        socket.emit ("aviso", sensor); // avisar del sensor que sobrepasa
+        if(this.estado == "Abierta"){
+          document.getElementById("activar_pers").checked = false;
+          encender ("activar_pers"); // cerrar persiana
+        }
+      }
+      // no sobrepasa ningún límite, no hace nada
+      else {}
 
     }
 

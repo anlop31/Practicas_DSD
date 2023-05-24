@@ -50,7 +50,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
     if(err)
         throw err;
 
-    httpServer.listen(8081);
+    httpServer.listen(8080);
 	var io = socketio(httpServer);
 
     // la base de datos se llamará domotica
@@ -70,7 +70,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
 
 
     io.sockets.on('connection',function(socket) {
-        console.log("Conectado");
+        console.log("Conectado al socket");
     
         // Inserción de colección Aire acondicionado //
         // Insertamos los valores
@@ -91,7 +91,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
             dbo.collection("aire_acondicionado").insert({estado:datos}, {safe:true},
                 function(err, result) {
                     if (!err){
-                        console.log("Insertado en A/C: {estado:" + datos + "}");
+                        console.log("Insertado estado nuevo de A/C: {estado:" + datos + "}");
                         io.sockets.emit('Registro', getTimeStamp() + " - Aire acondicionado " + datos); // aire acondicionado apagado/encendido
                     }
                     else
@@ -119,7 +119,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
             dbo.collection("persianas").insert({estado:datos}, {safe:true},
                 function(err, result) {
                     if (!err){
-                        console.log("Insertado en Persianas: {estado:" + datos + "}");
+                        console.log("Insertado estado nuevo de las persianas: {estado:" + datos + "}");
                         io.sockets.emit('Registro', getTimeStamp() + " - Persiana " + datos);
                     }
                     else
@@ -127,18 +127,19 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
                 });
         });
 
-        /*** Avisos ***/
+        // Aviso de que se pasa de los umbrales y se cierran las persianas
         socket.on ('aviso', function (sensor) {
-            var alarma = "Aviso: " + sensor + " fuera de los umbrales"; // cambiar
-            console.log (alarma);
+            var alarma = "Aviso: " + sensor + " fuera de los umbrales, cerrando persianas"; 
+            // console.log (alarma);
             io.sockets.emit ('aviso', alarma);
         });
 
-        socket.on ('accion', function () {
-            var alarma = "Aviso: los sensores sobrepasan los umbrales máximos, abriendo persianas";
-            console.log (alarma);
-            io.sockets.emit ('aviso', alarma);
-        });
+        // aviso de que se abren las persianas
+        // socket.on ('accion', function () {
+        //     var alarma = "Aviso: los sensores sobrepasan los umbrales máximos, cerrando persianas";
+        //     console.log (alarma);
+        //     io.sockets.emit ('aviso', alarma);
+        // });
 
     });
 
