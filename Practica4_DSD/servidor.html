@@ -174,7 +174,7 @@
 
       // ambos sobrepasan los máximos
       if ( (+temp[0].value > +temp[2].value) && (+luz[0].value > +luz[2].value) ){ // max
-        socket.emit ("accion"); // ambos sensores
+        socket.emit ("aviso_ambos"); // ambos sensores
         if(this.estado == "Abierta"){
           document.getElementById("activar_pers").checked = false;
           encender ("activar_pers"); // cerrar persiana
@@ -182,7 +182,7 @@
       }
       // ambos sobrepasan los mínimos
       else if ( (+temp[0].value < +temp[1].value) && (+luz[0].value < +luz[1].value) ){ //min
-        socket.emit ("accion"); // ambos sensores
+        socket.emit ("aviso_ambos"); // ambos sensores
         if(this.estado == "Abierta"){
           document.getElementById("activar_pers").checked = false;
           encender ("activar_pers"); // cerrar persiana
