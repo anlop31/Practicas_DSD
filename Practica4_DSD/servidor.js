@@ -134,6 +134,13 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
             io.sockets.emit ('aviso', alarma);
         });
 
+        // Aviso de que se pasa de los umbrales y se cierran las persianas (en caso de que los dos sensores sobrepasen)
+        socket.on ('accion', function () {
+            var alarma = "Aviso: los sensores fuera de los umbrales, cerrando persianas";
+            console.log (alarma);
+            io.sockets.emit ('aviso', alarma);
+          })
+
     });
 
 });
