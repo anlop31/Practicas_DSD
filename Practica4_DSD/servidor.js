@@ -50,7 +50,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
     if(err)
         throw err;
 
-    httpServer.listen(8080);
+    httpServer.listen(8081);
 	var io = socketio(httpServer);
 
     // la base de datos se llamará domotica
@@ -72,21 +72,21 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
     io.sockets.on('connection',function(socket) {
         console.log("Conectado al socket");
     
-        // Inserción de colección Aire acondicionado //
+        // Inserción de colección aire_acondicionado //
         // Insertamos los valores
         socket.on('enviar-datos-aire', function (datos) {
             dbo.collection("aire_acondicionado").insert({valor:datos[0], minimo:datos[1], maximo:datos[2]}, {safe:true},
                 function(err, result) {
                     if (!err){
-                    console.log("Hemos insertado en A/C: {valor:" + datos[0] + ", minimo:" + datos[1] + ", maximo:" + datos[2] + "}");
-                    io.sockets.emit('Registro', getTimeStamp() + " - Modificación de A/C: " + datos[0] + " grados");
+                        console.log("Hemos insertado en A/C: {valor:" + datos[0] + ", minimo:" + datos[1] + ", maximo:" + datos[2] + "}");
+                        io.sockets.emit('Registro', getTimeStamp() + " - Modificación de A/C: " + datos[0] + " grados");
                     }
                     else
-                        console.log("Error al insertar datos en la colección.");
+                        console.log("Error insertando datos en aire acondicionado.");
                 });
         });
 
-        // Introducimos el  estado (activar el aire acondicionado)
+        // Introducimos el estado (activar el aire acondicionado)
         socket.on('activar_ac', function (datos) {
             dbo.collection("aire_acondicionado").insert({estado:datos}, {safe:true},
                 function(err, result) {
@@ -95,7 +95,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
                         io.sockets.emit('Registro', getTimeStamp() + " - Aire acondicionado " + datos); // aire acondicionado apagado/encendido
                     }
                     else
-                        console.log("Error al insertar datos en la colección.");
+                        console.log("Error insertando datos en aire acondicionado.");
                 });
         });
     
@@ -110,7 +110,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
                         io.sockets.emit('Registro', getTimeStamp() + " - Luminosidad modificada");
                     }
                     else
-                        console.log("Error al insertar datos en la colección.");
+                        console.log("Error insertando datos en persianas.");
                 });
         });
 
@@ -123,7 +123,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
                         io.sockets.emit('Registro', getTimeStamp() + " - Persiana " + datos);
                     }
                     else
-                        console.log("Error al insertar datos en la colección.");
+                        console.log("Error insertando datos en persianas.");
                 });
         });
 
@@ -133,13 +133,6 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
             // console.log (alarma);
             io.sockets.emit ('aviso', alarma);
         });
-
-        // aviso de que se abren las persianas
-        // socket.on ('accion', function () {
-        //     var alarma = "Aviso: los sensores sobrepasan los umbrales máximos, cerrando persianas";
-        //     console.log (alarma);
-        //     io.sockets.emit ('aviso', alarma);
-        // });
 
     });
 
