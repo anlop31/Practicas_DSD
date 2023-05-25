@@ -188,6 +188,22 @@
           encender ("activar_pers"); // cerrar persiana
         }
       }
+      // temperatura sobrepasa mínimo y luminosidad sobrepasa máximo
+      else if ( (+temp[0].value < +temp[1].value) && (+luz[0].value > +luz[2].value) ){ 
+        socket.emit ("aviso_ambos"); // ambos sensores
+        if(this.estado == "Abierta"){
+          document.getElementById("activar_pers").checked = false;
+          encender ("activar_pers"); // cerrar persiana
+        }
+      }
+      // temperatura sobrepasa máximo y luminosidad sobrepasa mínimo
+      else if ( (+temp[0].value > +temp[2].value) && (+luz[0].value < +luz[1].value) ){ 
+        socket.emit ("aviso_ambos"); // ambos sensores
+        if(this.estado == "Abierta"){
+          document.getElementById("activar_pers").checked = false;
+          encender ("activar_pers"); // cerrar persiana
+        }
+      }
       // el cambio actual ha sobrepasado el mínimo o máximo
       else if ( (+datos[0] < +datos[1]) || (+datos[0] > +datos[2]) ) { // cambio actual
         socket.emit ("aviso", sensor); // avisar del sensor que sobrepasa
