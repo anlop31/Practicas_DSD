@@ -107,7 +107,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
                 function(err, result) {
                     if (!err){
                         console.log("Insertado en Persianas: {valor:" + datos[0] + ", minimo:" + datos[1] + ", maximo:" + datos[2] + "}");
-                        io.sockets.emit('Registro', getTimeStamp() + " - Luminosidad modificada");
+                        io.sockets.emit('Registro', getTimeStamp() + " - Modificación de luminosidad: " + datos[0]);
                     }
                     else
                         console.log("Error insertando datos en persianas.");
