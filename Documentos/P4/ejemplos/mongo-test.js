@@ -46,7 +46,8 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
 	var io = socketio(httpServer);
 
 	var dbo = db.db("pruebaBaseDatos");
-	dbo.createCollection("test", function(err, collection){
+	var collection = dbo.collection("test");
+	// dbo.createCollection("test", function(err, collection){
     	io.sockets.on('connection',
 		function(client) {
 			client.emit('my-address', {host:client.request.connection.remoteAddress, port:client.request.connection.remotePort});
@@ -59,7 +60,7 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
 				});
 			});
 		});
-    });
+    // });
 });
 
 console.log("Servicio MongoDB iniciado");
